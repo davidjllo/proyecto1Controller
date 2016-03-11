@@ -4,6 +4,7 @@ header("Access-Control-Allow-Origin: *");
 
 
  switch ($_GET['op']) {   
+    //direccion urlBase = http://10.131.137.200/proyecto1controller/dataAccess.php?op=
     case 1:
     //login
        $sql="SELECT * FROM tbl_user WHERE tbl_user_username='".$_GET['user']."'";
@@ -63,7 +64,7 @@ header("Access-Control-Allow-Origin: *");
          break;
      case 5:
     //listar canales donde estoy (params user) devuelve subscripciones
-       $sql="SELECT * FROM tbl_suscripciones WHERE tbl_suscriptions_user == ".$_GET['user'];
+       $sql="SELECT * FROM tbl_suscripciones WHERE tbl_suscriptions_user == ".$_GET['user'].;
  
         $result=$conn->query($sql);
             if ($result!=1) {
@@ -79,7 +80,7 @@ header("Access-Control-Allow-Origin: *");
          break;
     case 6:
     //listar canales donde no estoy (params user)
-       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name NOT IN (SELECT * FROM tbl_suscripciones WHERE tbl_suscriptions_user == ".$_GET['user']);
+       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name NOT IN (SELECT * FROM tbl_suscripciones WHERE tbl_suscriptions_user == ".$_GET['user'].")";
  
         $result=$conn->query($sql);
             if ($result!=1) {
@@ -95,7 +96,7 @@ header("Access-Control-Allow-Origin: *");
          break;
     case 7:
     //Listar mensajes por canal (params channel)
-       $sql="SELECT * FROM tbl_mensaje WHERE tbl_mensaje_channel == ".$_GET['channel'];
+       $sql="SELECT * FROM tbl_mensaje WHERE tbl_mensaje_channel == ".$_GET['channel'].;
  
         $result=$conn->query($sql);
             if ($result!=1) {
