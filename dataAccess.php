@@ -65,7 +65,7 @@ header("Access-Control-Allow-Origin: *");
          break;
      case 5:
     //listar canales donde estoy (params userid) devuelve subscripciones
-    $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_userid = '".$_GET['userid']."'')";
+    $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_userid = '".$_GET['userid']."')";
         $result=$conn->query($sql);
             if ($result!=1) {
                 // oupsuss ssata of each row
