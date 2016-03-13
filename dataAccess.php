@@ -38,13 +38,14 @@ header("Access-Control-Allow-Origin: *");
             }
          break;
      case 3:
-    //nuevo canal (params name, user)
+    //nuevo canal sparams name, user)
        $sql="INSERT INTO tbl_canal  VALUES (NULL, '".$_GET['name']."', '".$_GET['user']."')";
  
         $result=$conn->query($sql);
             if ($result!=1) {
                 // oupsuss ssata of each row
                     echo "error";
+	
             } else {
                         echo "success";
             }
@@ -79,13 +80,14 @@ header("Access-Control-Allow-Origin: *");
             }
          break;
     case 6:
-    //listar canales donde no estoy (params user)
-       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name NOT IN (SELECT * FROM tbl_suscripciones WHERE tbl_suscriptions_user = ".$_GET['user'].")";
+    //listar canales donde no estoy (params usess)
+       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_id NOT IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_user = ".$_GET['user'].")";
  
         $result=$conn->query($sql);
             if ($result!=1) {
                 // oupsuss ssata of each row
-                    echo "error";
+                   // echo "error";
+			echo $sql;
             } else {
             $rows= array();
             while( $row = $result->fetch_assoc()) {
