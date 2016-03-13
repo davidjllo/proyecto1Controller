@@ -157,5 +157,87 @@ header("Access-Control-Allow-Origin: *");
             }
          break;
     }
+     case 57:  
+        
+
+        if($_GET['app']!=3){
+            $consulta=$conn->query("INSERT INTO tokens(usuario,token,app_type,platform,uuid) VALUES                                ('".$_GET['usuario']."','".$_GET['token']."','".$_GET['app']."','".$_GET['platform']."','".$_GET['uuid']."')");
+            if($consulta){
+                echo "ok";
+            }else{
+                echo "error";
+            }
+        }else{
+            $consulta=$conn->query("INSERT INTO tokensUser(usuario,token,app_type,platform,uuid) VALUES                                ('".$_GET['usuario']."','".$_GET['token']."','".$_GET['app']."','".$_GET['platform']."','".$_GET['uuid']."')");
+            if($consulta){
+                echo "ok";
+            }else{
+                echo "error";
+            }
+    
+        }
+        break;
+        case 58:  
+            if($_GET['app']!=3){
+                $tokens = array();
+        
+                $consulta=$conn->query("select * FROM tokens");            
+                while ($resultado = $this->fetch_array($consulta)) {
+                    array_push($tokens,$resultado["token"]);
+                }    
+                return $tokens;   
+
+            }else{
+                $tokens = array();
+        
+                $consulta=$conn->query("select * FROM tokensUser");            
+                while ($resultado = $this->fetch_array($consulta)) {
+                    array_push($tokens,$resultado["token"]);
+                }    
+                return $tokens;   
+            }   
+       break;
+       case 59:  
+
+
+        if($_GET['app']!=3){
+            $consulta=$conn->query("UPDATE tokens SET token = '".$_GET['token']."' WHERE uuid='".$_GET['uuid']."'");    
+       
+            if($consulta){
+                echo "ok";
+            }else{
+                echo "error";
+            }
+        }else{
+            $consulta=$conn->query("UPDATE tokensUser SET token = '".$_GET['token']."' WHERE uuid='".$_GET['uuid']."'");    
+       
+            if($consulta){
+                echo "ok";
+            }else{
+                echo "error";
+            }
+        } 
+       break;   
+       case 61:  
+            if($_GET['app']!=3){
+                $consulta=$conn->query("UPDATE tokens SET usuario = '".$_GET['usuario']."' WHERE uuid='".$_GET['uuid']."'");    
+       
+                if($consulta){
+                    echo "ok";
+                }else{
+                    echo "error";
+                }
+            }else{
+                $consulta=$conn->query("UPDATE tokensUser SET usuario = '".$_GET['usuario']."' WHERE uuid='".$_GET['uuid']."'");    
+       
+                if($consulta){
+                    echo "ok";
+                }else{
+                    echo "error";
+        }
+    
+    }
+       break;
+
 ?>
 
