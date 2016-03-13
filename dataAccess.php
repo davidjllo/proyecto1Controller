@@ -40,7 +40,7 @@ header("Access-Control-Allow-Origin: *");
      case 3:
     //crear nuevo canal sparams name, userid)
        $sql="INSERT INTO tbl_canal  VALUES (NULL, '".$_GET['name']."', '".$_GET['userid']."')";
-        query("INSERT INTO tbl_suscripciones  VALUES (NULL, '".$_GET['userid']."', '".$_GET['name']."')");
+        $conn->query("INSERT INTO tbl_suscripciones  VALUES (NULL, '".$_GET['userid']."', '".$_GET['name']."')");
         $result=$conn->query($sql);
             if ($result!=1) {
                 // oupsuss ssata of each row
