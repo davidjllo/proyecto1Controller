@@ -140,7 +140,22 @@ header("Access-Control-Allow-Origin: *");
                         echo json_encode($rows);
             }
          break;
-
+    case 10:
+    //recibir el user id dado el username (params username)
+    $sql="SELECT tbl_user_id FROM tbl_user WHERE tbl_user_username ='".$_GET['username']."'";
+ 
+        $result=$conn->query($sql);
+            if ($result!=1) {
+                // oupsuss ssata of each row
+                    echo "error";
+            } else {
+            $rows= array();
+            while( $row = $result->fetch_assoc()) {
+                $rows[] = $row;
+            }
+                        echo json_encode($rows);
+            }
+         break;
     }
 ?>
 
