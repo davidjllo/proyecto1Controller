@@ -80,7 +80,7 @@ header("Access-Control-Allow-Origin: *");
          break;
     case 6:
     //listar canales donde no estoy (params userid)
-       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name NOT IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_userid = '".$_GET['userid']."'')";
+       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name NOT IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_userid = '".$_GET['userid']."')";
  
         $result=$conn->query($sql);
             if ($result!=1) {
