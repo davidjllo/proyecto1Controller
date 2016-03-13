@@ -38,9 +38,9 @@ header("Access-Control-Allow-Origin: *");
             }
          break;
      case 3:
-    //nuevo canal sparams name, user)
-       $sql="INSERT INTO tbl_canal  VALUES (NULL, '".$_GET['name']."', '".$_GET['user']."')";
- 
+    //nuevo canal sparams name, userid)
+       $sql="INSERT INTO tbl_canal  VALUES (NULL, '".$_GET['name']."', '".$_GET['userid']."')";
+        query("INSERT INTO tbl_suscripciones  VALUES (NULL, '".$_GET['userid']."', '".$_GET['name']."')");
         $result=$conn->query($sql);
             if ($result!=1) {
                 // oupsuss ssata of each row
@@ -52,8 +52,8 @@ header("Access-Control-Allow-Origin: *");
          break;
  
      case 4:
-    //registrar usuario en canal (params user & channel)
-       $sql="INSERT INTO tbl_suscripciones  VALUES (NULL, '".$_GET['user']."', '".$_GET['channel']."')";
+    //registrar usuario en canal (params userid & channel)
+       $sql="INSERT INTO tbl_suscripciones  VALUES (NULL, '".$_GET['userid']."', '".$_GET['channel']."')";
  
         $result=$conn->query($sql);
             if ($result!=1) {
@@ -64,9 +64,8 @@ header("Access-Control-Allow-Origin: *");
             }
          break;
      case 5:
-    //listar canales donde estoy (params user) devuelve subscripciones
-       $sql="SELECT * FROM tbl_suscripciones WHERE tbl_suscriptions_user = '".$_GET['user']."'";
- 
+    //listar canales donde estoy (params userid) devuelve subscripciones
+    $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_userid = ".$_GET['userid'].")";
         $result=$conn->query($sql);
             if ($result!=1) {
                 // oupsuss ssata of each row
@@ -80,8 +79,8 @@ header("Access-Control-Allow-Origin: *");
             }
          break;
     case 6:
-    //listar canales donde no estoy (params usess)
-       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_id NOT IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_user = ".$_GET['user'].")";
+    //listar canales donde no estoy (params userid)
+       $sql="SELECT * FROM tbl_canal WHERE tbl_canal_name NOT IN (SELECT tbl_suscripciones.tbl_suscriptions_channel FROM tbl_suscripciones WHERE tbl_suscriptions_userid = ".$_GET['userid'].")";
  
         $result=$conn->query($sql);
             if ($result!=1) {
@@ -113,8 +112,8 @@ header("Access-Control-Allow-Origin: *");
             }
          break;
     case 8:
-    //Insertar mensaje (params channel & user & message)
-       $sql="INSERT INTO tbl_mensaje  VALUES (NULL, '".$_GET['channel']."', '".$_GET['user']."','".$_GET['message']."')";
+    //Insertar mensaje (params channel & userid & message)
+       $sql="INSERT INTO tbl_mensaje  VALUES (NULL, '".$_GET['channel']."', '".$_GET['userid']."','".$_GET['message']."')";
  
         $result=$conn->query($sql);
             if ($result!=1) {
@@ -124,6 +123,24 @@ header("Access-Control-Allow-Origin: *");
                         echo "success";
             }
          break;
+
+    case 9:
+    //Listar todos los id de usuarios subscritos a un canal (params channel)
+       $sql="SELECT tbl_suscriptions_userid FROM tbl_suscripciones WHERE tbl_suscriptions_channel ='".$_GET['channel']."'";
+ 
+        $result=$conn->query($sql);
+            if ($result!=1) {
+                // oupsuss ssata of each row
+                    echo "error";
+            } else {
+            $rows= array();
+            while( $row = $result->fetch_assoc()) {
+                $rows[] = $row;
+            }
+                        echo json_encode($rows);
+            }
+         break;
+
     }
 ?>
 
