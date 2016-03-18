@@ -14,7 +14,10 @@ header("Access-Control-Allow-Origin: *");
             if ($result->num_rows > 0) {
                 // oupsut ssata sf each row
                 while($row = $result->fetch_assoc()) {
-                    if($row["tbl_user_password"]==$_GET['pass']){
+//echo $row["tbl_user_password"];
+//echo "==";
+//echo $_GET['pass'];
+                    if($row["tbl_user_password"]===$_GET['pass']){
                         echo $row["tbl_user_id"];
                     //echo json_encode($row);
                     }else{
@@ -156,7 +159,7 @@ header("Access-Control-Allow-Origin: *");
                         echo json_encode($rows);
             }
          break;
-    }
+    
      case 57:  
         
 
@@ -172,13 +175,14 @@ header("Access-Control-Allow-Origin: *");
         case 58:  
             
                 $tokens = array();
-        
+       
                 $consulta=$conn->query("SELECT tokens.token FROM tokens WHERE tokens.usuario IN ( SELECT tbl_suscripciones.tbl_suscriptions_userid FROM tbl_suscripciones WHERE tbl_suscripciones.tbl_suscriptions_channel = '".$_GET['canal']."')");            
                 while ($resultado = $this->fetch_array($consulta)) {
                     array_push($tokens,$resultado["token"]);
-                } 
+                }
+		echo $tokens;
                 $data = json_decode('{
-                "tokens":'.$tokens.',
+                "tokens":["'.$tokens.'"],
                 "notification":{
                     "alert":"Nuevo Mensaje en: '.$_GET['canal'].'",
                     "ios":{
@@ -203,6 +207,7 @@ header("Access-Control-Allow-Origin: *");
                     }
                 }
             }', true);
+
             $data_string = json_encode($data);
             $ch = curl_init('https://push.ionic.io/api/v1/push');
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -215,7 +220,7 @@ header("Access-Control-Allow-Origin: *");
                 'Authorization: Basic '.base64_encode($yourApiSecret)
             )
         );
-        $result = curl_exec($ch);               
+        $result = curl_exec($ch);              
        break;
        case 59:  
 
