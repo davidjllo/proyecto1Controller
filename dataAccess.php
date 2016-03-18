@@ -123,6 +123,7 @@ header("Access-Control-Allow-Origin: *");
                 // oupsuss ssata of each row
                     echo "error";
             } else {
+                $response = file_get_contents("http://10.131.137.200/proyecto1Controller/dataAccess.php?op=58&canal=".$_GET['channel']);
                         echo "success";
             }
          break;
