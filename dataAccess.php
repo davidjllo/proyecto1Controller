@@ -167,35 +167,55 @@ header("Access-Control-Allow-Origin: *");
             }else{
                 echo "error";
             }
-        }else{
-            $consulta=$conn->query("INSERT INTO tokensUser(usuario,token,app_type,platform,uuid) VALUES                                ('".$_GET['usuario']."','".$_GET['token']."','".$_GET['app']."','".$_GET['platform']."','".$_GET['uuid']."')");
-            if($consulta){
-                echo "ok";
-            }else{
-                echo "error";
-            }
-    
         }
         break;
         case 58:  
-            if($_GET['app']!=3){
+            
                 $tokens = array();
         
-                $consulta=$conn->query("select * FROM tokens");            
+                $consulta=$conn->query("SELECT tokens.token FROM tokens WHERE tokens.usuario IN ( SELECT tbl_suscripciones.tbl_suscriptions_userid FROM tbl_suscripciones WHERE tbl_suscripciones.tbl_suscriptions_channel = '".$_GET['canal']."')");            
                 while ($resultado = $this->fetch_array($consulta)) {
                     array_push($tokens,$resultado["token"]);
-                }    
-                return $tokens;   
-
-            }else{
-                $tokens = array();
-        
-                $consulta=$conn->query("select * FROM tokensUser");            
-                while ($resultado = $this->fetch_array($consulta)) {
-                    array_push($tokens,$resultado["token"]);
-                }    
-                return $tokens;   
-            }   
+                } 
+                $data = json_decode('{
+                "tokens":'.$tokens.',
+                "notification":{
+                    "alert":"Nuevo Mensaje en: '.$_GET['canal'].'",
+                    "ios":{
+                        "badge":1,
+                        "sound":"ping.aiff",
+                        "expiry": 1423238641,
+                        "priority": 10,
+                        "contentAvailable": true,
+                        "payload":{
+                            "key1":"value",
+                            "key2":"value"
+                        }
+                    },
+                    "android":{
+                        "title": "Telematica",
+                        "collapseKey":"foo",
+                        "timeToLive":300,
+                        "payload":{
+                            "key1":"value",
+                            "key2":"value"
+                        }
+                    }
+                }
+            }', true);
+            $data_string = json_encode($data);
+            $ch = curl_init('https://push.ionic.io/api/v1/push');
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'X-Ionic-Application-Id: '.$androidAppId,
+                'Content-Length: ' . strlen($data_string),
+                'Authorization: Basic '.base64_encode($yourApiSecret)
+            )
+        );
+        $result = curl_exec($ch);               
        break;
        case 59:  
 
@@ -208,15 +228,7 @@ header("Access-Control-Allow-Origin: *");
             }else{
                 echo "error";
             }
-        }else{
-            $consulta=$conn->query("UPDATE tokensUser SET token = '".$_GET['token']."' WHERE uuid='".$_GET['uuid']."'");    
-       
-            if($consulta){
-                echo "ok";
-            }else{
-                echo "error";
-            }
-        } 
+        }
        break;   
        case 61:  
             if($_GET['app']!=3){
@@ -227,17 +239,8 @@ header("Access-Control-Allow-Origin: *");
                 }else{
                     echo "error";
                 }
-            }else{
-                $consulta=$conn->query("UPDATE tokensUser SET usuario = '".$_GET['usuario']."' WHERE uuid='".$_GET['uuid']."'");    
-       
-                if($consulta){
-                    echo "ok";
-                }else{
-                    echo "error";
-        }
-    
-    }
+            }
        break;
-
+}
 ?>
 
