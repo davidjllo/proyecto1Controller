@@ -176,11 +176,14 @@ header("Access-Control-Allow-Origin: *");
             
                 $tokens = array();
        
-                $consulta=$conn->query("SELECT tokens.token FROM tokens WHERE tokens.usuario IN ( SELECT tbl_suscripciones.tbl_suscriptions_userid FROM tbl_suscripciones WHERE tbl_suscripciones.tbl_suscriptions_channel = '".$_GET['canal']."')");            
-                while ($resultado = $this->fetch_array($consulta)) {
-                    array_push($tokens,$resultado["token"]);
+                $consulta=$conn->query("SELECT tokens.token FROM tokens WHERE tokens.usuario IN ( SELECT tbl_suscripciones.tbl_suscriptions_userid FROM tbl_suscripciones WHERE tbl_suscripciones.tbl_suscriptions_channel = '".$_GET['canal']."')");   
+
+
+                $rows= array();
+                while( $row = $consulta->fetch_assoc()) {
+                    $rows[] = $row;
                 }
-		echo $tokens;
+		echo $rows;
                 $data = json_decode('{
                 "tokens":["'.$tokens.'"],
                 "notification":{
