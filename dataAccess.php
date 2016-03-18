@@ -181,11 +181,11 @@ header("Access-Control-Allow-Origin: *");
 
                 $rows= array();
                 while( $row = $consulta->fetch_assoc()) {
-                    $rows[] = $row;
+                    $rows[] = $row['token'];
                 }
-		echo $rows;
+		
                 $data = json_decode('{
-                "tokens":["'.$tokens.'"],
+                "tokens":'.json_encode($rows).',
                 "notification":{
                     "alert":"Nuevo Mensaje en: '.$_GET['canal'].'",
                     "ios":{
